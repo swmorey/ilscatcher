@@ -5,7 +5,16 @@ gem 'rails', '3.2.11'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
+group :production do
+gem 'pg'
+end
+
+group :development do
+gem 'sqlite3-ruby'
+end
+
+
+
 gem 'nokogiri'
 
 
