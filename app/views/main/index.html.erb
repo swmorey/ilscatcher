@@ -6,7 +6,7 @@
 
 
 <%= @doc.css("float_right").text %>
-<h1><%= @pagetitle %></h1>
+
 <% if @doc.css(".result_table_row") != 0 %>
 
 
@@ -14,11 +14,23 @@
 <div class="resultbox">
 <img class="resultimgbox" src="http://catalog.tadl.org/<%= item.at_css(".result_table_pic").attr('src') %>">
 <br />
-<h2 class="resulttitle"><%= item.at_css(".bigger").text %></h2><h3 class="resultauthor"><%= truncate(item.at_css('[@name="item_author"]').text) %></h3>
+<h2 class="resulttitle"><%= truncate(item.at_css(".bigger").text, :length => 200) %></h2><h3 class="resultauthor"><%= truncate(item.at_css('[@name="item_author"]').text) %></h3>
 <br />
 <p class="resultabstract">
 <%= item.at_css(".result_table_summary").text %>
 </p>
+<div class="bottomstuff">
+<a href class="hold_button" src="#">Place Hold</a>
+<a href class="hold_button" src="#">Add to List</a>
+<a href class="hold_button" src="#">See More</a>
+<div style=" clear: both;"></div>
+<p class="resultcount">
+<%= item.at_css(".result_count").text %>
+</p>
+</div>
+
+
+
 <div style=" clear: both;"></div>
 </div>
   
