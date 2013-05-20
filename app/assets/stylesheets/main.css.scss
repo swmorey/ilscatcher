@@ -1,0 +1,65 @@
+// Place all the styles related to the main controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+html { 
+  background: url('http://empower.swmorey.com/images/traverse-citybg.jpg') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.resultbox
+{
+
+background-color: #D8D8D8;
+margin-top: 10px;
+margin-bottom: 10px;
+margin-left: 20px;
+margin-right: 20px;
+padding: 10px;
+width: 460px;
+height: 250px;
+float: left;
+opacity:0.85;
+filter:alpha(opacity=85);
+
+}
+
+.resulttitle
+{
+font-size: 20px;
+font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+vertical-align: top;
+margin-top: -17px;
+
+}
+
+.resultauthor
+{
+font-size: 16px;
+font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+vertical-align: top;
+margin-top: -17px;
+font-style:italic;
+margin-bottom: 5px;
+}
+
+.resultabstract
+{
+font-size: 14px;
+font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+vertical-align: top;
+margin-top: -20px;
+}
+
+
+
+.resultimgbox
+{
+float: left;
+margin: 10px;
+max-width: 200px;
+}

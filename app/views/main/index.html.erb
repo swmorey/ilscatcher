@@ -1,0 +1,29 @@
+<%= form_tag("/main/index", :method => "get") do %>
+  <%= label_tag(:q, "Search for:") %>
+  <%= text_field_tag(:q) %>
+  <%= submit_tag("Search") %>
+<% end %>
+
+
+<%= @doc.css("float_right").text %>
+<h1><%= @pagetitle %></h1>
+<% if @doc.css(".result_table_row") != 0 %>
+
+
+<% @doc.css(".result_table_row").each do |item| %>
+<div class="resultbox">
+<img class="resultimgbox" src="http://catalog.tadl.org/<%= item.at_css(".result_table_pic").attr('src') %>">
+<br />
+<h2 class="resulttitle"><%= item.at_css(".bigger").text %></h2><h3 class="resultauthor"><%= truncate(item.at_css('[@name="item_author"]').text) %></h3>
+<br />
+<p class="resultabstract">
+<%= item.at_css(".result_table_summary").text %>
+</p>
+<div style=" clear: both;"></div>
+</div>
+  
+<% end %>
+
+<% else %>
+<h1>No Results</h1>
+<% end %>
