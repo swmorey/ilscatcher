@@ -9,6 +9,7 @@ require 'open-uri'
   
 if params[:q].present?
 @pagetitle = URI::escape('http://catalog.tadl.org/eg/opac/results?query=' + params[:q] + ';qtype=keyword;limit=60')
+@searchquery = params[:q]
 url = @pagetitle
 @doc = Nokogiri::HTML(open(url))
    else

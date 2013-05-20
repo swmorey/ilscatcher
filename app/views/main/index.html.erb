@@ -1,9 +1,14 @@
+<div id="header">
+
 <%= form_tag("/main/index", :method => "get") do %>
   <%= label_tag(:q, "Search for:") %>
-  <%= text_field_tag(:q) %>
+  <%= text_field_tag(:q, @searchquery) %>
   <%= submit_tag("Search") %>
 <% end %>
 
+</div>
+
+<div class="spacer"></div>
 
 <%= @doc.css("float_right").text %>
 
@@ -25,7 +30,11 @@
 <a href class="hold_button" src="#">See More</a>
 <div style=" clear: both;"></div>
 <p class="resultcount">
+
+<% if item.at_css(".result_count") %>
 <%= item.at_css(".result_count").text %>
+<% else %>
+<% end %>
 </p>
 </div>
 
