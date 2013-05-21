@@ -15,14 +15,23 @@ html {
 			width: 100%;
 			margin: 0;
 			padding: 5px;
-			height: 30px;
+			height: 40px;
 			background: url('http://empower.swmorey.com/images/binding_dark.png'); 
 			color: #fff;
 			font-size: 20px;
 			font-weight: bold;
 			font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+			opacity:0.9;
+            filter:alpha(opacity=90);
 		}
+.searchform {
+  width:800px;
+  height: 27px;
+}
 
+.searchbutton {
+  width:100px;
+}
 
 .spacer
 {

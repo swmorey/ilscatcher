@@ -2,9 +2,12 @@
 
 <%= form_tag("/main/index", :method => "get") do %>
   <%= label_tag(:q, "Search for:") %>
-  <%= text_field_tag(:q, @searchquery) %>
-  <%= submit_tag("Search") %>
+  <%= text_field_tag(:q, @searchquery, :class => 'searchform') %>
+ <%= submit_tag("Search", :class => 'searchbutton') %>
 <% end %>
+
+
+
 
 </div>
 
@@ -19,7 +22,7 @@
 <div class="resultbox">
 <img class="resultimgbox" src="http://catalog.tadl.org/<%= item.at_css(".result_table_pic").attr('src') %>">
 <br />
-<h2 class="resulttitle"><%= truncate(item.at_css(".bigger").text, :length => 200) %></h2><h3 class="resultauthor"><%= truncate(item.at_css('[@name="item_author"]').text) %></h3>
+<h2 class="resulttitle"><%= truncate(item.at_css(".bigger").text, :length => 180) %></h2><h3 class="resultauthor"><%= truncate(item.at_css('[@name="item_author"]').text) %></h3>
 <br />
 <p class="resultabstract">
 <%= item.at_css(".result_table_summary").text %>
@@ -35,6 +38,13 @@
 <%= item.at_css(".result_count").text %>
 <% else %>
 <% end %>
+<br />
+<% if item.at_css('[@name="bib_cn_list"]') %>
+<%= item.at_css('[@name="bib_cn_list"]').text %>
+<% else %>
+<% end %>
+
+
 </p>
 </div>
 
