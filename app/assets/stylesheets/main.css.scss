@@ -25,17 +25,23 @@ html {
             filter:alpha(opacity=90);
 		}
 .searchform {
-  width:800px;
+  width:300px;
   height: 27px;
+  	font-size: 20px;
+			font-weight: bold;
+			font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+			margin-top: 3px;
 }
 
 .searchbutton {
   width:100px;
+  height: 27px;
+
 }
 
 .spacer
 {
-height: 30px;
+height: 45px;
 }
 
 
@@ -49,14 +55,14 @@ margin-left: 10px;
 margin-right: 10px;
 padding: 10px;
 width: 420px;
-height: 275px;
+height: 265px;
 float: left;
 position: relative;
 }
 
 .resulttitle
 {
-font-size: 20px;
+font-size: 18px;
 font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 vertical-align: top;
 margin-top: -17px;
@@ -68,9 +74,10 @@ margin-top: -17px;
 font-size: 16px;
 font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 vertical-align: top;
-margin-top: -17px;
+margin-top: -14px;
 font-style:italic;
 margin-bottom: 5px;
+font-weight: 500;
 }
 
 .resultabstract
@@ -86,7 +93,7 @@ margin-top: -20px;
 font-size: 14px;
 font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 vertical-align: bottom;
-margin-top: 20px;
+margin-top: 10px;
 font-weight:bold;
 }
 
