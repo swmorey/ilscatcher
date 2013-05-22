@@ -1,9 +1,9 @@
 <div id="header">
 
 <%= form_tag("/main/index", :method => "get", :id => "searchform") do %>
-  <%= label_tag(:q, "Look for:") %>
+  <%= label_tag(:q, "SEARCH:") %>
   <%= text_field_tag(:q, @searchquery, :class => 'searchform') %>
- <%= link_to 'SEARCH', "#", :onclick => "$('#searchform').submit()", :class => 'searchbutton' %>
+ <%= link_to 'GO', "#", :onclick => "$('#searchform').submit()", :class => 'searchbutton' %>
 <% end %>
 
 
@@ -18,7 +18,7 @@
 
 
 <% @doc.css(".result_table_row").each do |item| %>
-<div class="resultbox">
+<div class="resultbox shadow">
 <img class="resultimgbox" src="http://catalog.tadl.org/<%= item.at_css(".result_table_pic").attr('src') %>">
 <br />
 <h2 class="resulttitle"><img src="http://catalog.tadl.org/<%= item.at_css(".result_table_title_cell img").attr('src')  %>"><%= truncate(item.at_css(".bigger").text, :length => 200) %></h2><h3 class="resultauthor"><%= truncate(item.at_css('[@name="item_author"]').text) %></h3>
