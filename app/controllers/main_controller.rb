@@ -11,7 +11,7 @@ if params[:q].present?
 
 @searchquery = params[:q]
 @searchqueryclearned = CGI::escape(@searchquery)
-@pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=' + @searchqueryclearned + '&qtype=keyword&fi%3Aformat=&locg=22&limit=60'
+@pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=' + @searchqueryclearned + '&qtype=keyword&fi%3Aformat=&locg=22&limit=30'
 
 url = @pagetitle
 @doc = Nokogiri::HTML(open(url))

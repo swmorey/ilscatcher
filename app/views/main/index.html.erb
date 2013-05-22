@@ -12,25 +12,25 @@
 </div>
 
 <div class="spacer"></div>
-
+<div id="content">
 <%= @doc.css("float_right").text %>
 
-<% if @doc.css(".result_table_row") != 0 %>
 
 
 <% @doc.css(".result_table_row").each do |item| %>
 <div class="resultbox">
 <img class="resultimgbox" src="http://catalog.tadl.org/<%= item.at_css(".result_table_pic").attr('src') %>">
 <br />
-<h2 class="resulttitle"><%= truncate(item.at_css(".bigger").text, :length => 200) %></h2><h3 class="resultauthor"><%= truncate(item.at_css('[@name="item_author"]').text) %></h3>
+<h2 class="resulttitle"><img src="http://catalog.tadl.org/<%= item.at_css(".result_table_title_cell img").attr('src')  %>"><%= truncate(item.at_css(".bigger").text, :length => 200) %></h2><h3 class="resultauthor"><%= truncate(item.at_css('[@name="item_author"]').text) %></h3>
 <br />
 <p class="resultabstract">
-<%= item.at_css(".result_table_summary").text %>
+<%= item.at_css(".result_table_summary").text  %>
 </p>
 <div class="bottomstuff">
 <a href class="hold_button" src="#">Place Hold</a>
+<a class="hold_button iteminfo fancybox.iframe" href="http://catalog.tadl.org/eg/opac/record/<%= item.at_css(".search_link").attr('name').sub!(/record_/, "")  %>">See More</a>
 <a href class="hold_button" src="#">Add to List</a>
-<a href class="hold_button" src="#">See More</a>
+
 <div style=" clear: both;"></div>
 <p class="resultcount">
 
@@ -54,7 +54,20 @@
 </div>
   
 <% end %>
+</div>
 
-<% else %>
-<h1>No Results</h1>
-<% end %>
+   <script type = "text/javascript">
+$(document).ready(function() {
+	$(".iteminfo").fancybox({
+		maxWidth	: 1200,
+		maxHeight	: 1000,
+		fitToView	: false,
+		width		: '90%',
+		height		: '90%',
+		autoSize	: false,
+		closeClick	: false,
+		openEffect	: 'none',
+		closeEffect	: 'none'
+	});
+});
+</script>
