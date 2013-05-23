@@ -17,31 +17,36 @@ end
 if params[:mt].present?    
   
     if params[:mt] == "MOVIES"
-    @mediatype = "g"
+    @mediatype = "format=g"
     @fdefault ="MOVIES"    
     elsif params[:mt] == "BOOKS"
-    @mediatype = "at"
+    @mediatype = "format=at"
     @fdefault = "BOOKS"
     elsif params[:mt] == "MUSIC"
-    @mediatype = "j"
+    @mediatype = "format=j"
     @fdefault = "MUSIC"
     elsif params[:mt] == "VIDEO GAMES"
-    @mediatype = "mVG&facet=subject%7Cgenre%5Bgame%5D"
-    @fdefault = "VIDEO GAMES"         
+    @mediatype = "format=mVG&facet=subject%7Cgenre%5Bgame%5D"
+    @fdefault = "VIDEO GAMES" 
+    elsif params[:mt] == "ALL"
+    @mediatype = "format="
+    @fdefault = "ALL" 
     end
-  else  
-   @mediatype = "" 
-   @fdefault = "ALL" 
+    
+
+
 end
 
     
-    
+if params[:q].present? 
 
-@pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=' + @searchqueryclearned + '&qtype=keyword&fi%3Aformat=' + @mediatype + '&locg=22&limit=30'
+@pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=' + @searchqueryclearned + '&qtype=keyword&fi%3A'+ @mediatype +'&locg=22&limit=30'
 url = @pagetitle
 @doc = Nokogiri::HTML(open(url))
-
-  
+else
+url = "http://catalog.tadl.org"
+@doc = Nokogiri::HTML(open(url))  
+end
 end
 
   def about
