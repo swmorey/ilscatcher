@@ -5,6 +5,10 @@
 
 html { 
   background: url('http://empower.swmorey.com/images/binding_light.png'); 
+   font-size: 100%; 
+  overflow-y: scroll; 
+  -webkit-text-size-adjust: 100%; 
+  -ms-text-size-adjust: 100%;
 }
 	#header {
 			position: fixed;
@@ -25,6 +29,32 @@ html {
 			opacity:0.9;
             filter:alpha(opacity=90);
 		}
+
+#load_more
+{
+position: relative;
+background-color: #FFF;
+margin-top: 7px;
+margin-bottom: 7px;
+margin-left: 7px;
+margin-right: 7px;
+padding: 2px;
+width: 95%;
+height: 35px;
+  line-height: 35px;
+  font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+  text-align: center;
+  font-size: 20px;
+			font-weight: bold;
+}		
+
+
+#load_more a:link {text-decoration:none; color: #000;}
+#load_more a:visited {text-decoration:none; color: #000;}
+#load_more a:hover {text-decoration:underline;}
+#load_more a:active {text-decoration:underline;}
+
+	
 .searchform {
   width:300px;
   height: 27px;
@@ -152,3 +182,4 @@ a:link {text-decoration:none; color: #fff;}
 a:visited {text-decoration:none; color: #fff;}
 a:hover {text-decoration:underline;}
 a:active {text-decoration:underline;}
+

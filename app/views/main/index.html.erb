@@ -54,7 +54,57 @@
 </div>
   
 <% end %>
+
+
+
+<div style=" clear: both;"></div>
+
+
+<% if @doc.css(".result_count") %>
+<% @doc.css(".search_page_nav_link:not(.invisible)").first(1).each do |navlink| %>
+<% navlinktext = navlink.at_css(".nav_arrow_fix:not(.invisible)").text rescue nil%>
+<% if navlinktext == "►" %>
+<div id="load_more" class="shadow">
+<div class="load_more_p">
+<a href="">LOAD MORE RESULTS</a>
+<div id="loadmoreajaxloader" style="display:none;"><center></center></div>
 </div>
+</div>
+</div>
+<% else %>
+<% end %>
+<% end %>
+<% else %>
+<% end %>
+
+
+<script type="text/javascript">
+$(window).scroll(function()
+{
+    if($(window).scrollTop() == $(document).height() - $(window).height())
+    {
+        $('div#loadmoreajaxloader').show();
+        $.ajax({
+        url: "loadmore.php",
+        success: function(html)
+        {
+            if(html)
+            {
+                $("#postswrapper").append(html);
+                $('div#loadmoreajaxloader').hide();
+            }else
+            {
+                $('div#loadmoreajaxloader').html('<center>No more posts to show.</center>');
+            }
+        }
+        });
+    }
+});
+</script>
+
+
+
+
 
    <script type = "text/javascript">
 $(document).ready(function() {
@@ -67,7 +117,18 @@ $(document).ready(function() {
 		autoSize	: false,
 		closeClick	: false,
 		openEffect	: 'none',
-		closeEffect	: 'none'
+		closeEffect	: 'none',
+		centerOnScroll : 'true'
 	});
+});
+
+
+$('.iteminfo').fancybox({
+  padding: 0,
+  helpers: {
+    overlay: {
+      locked: false
+    }
+  }
 });
 </script>
