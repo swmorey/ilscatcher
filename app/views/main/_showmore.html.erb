@@ -1,0 +1,63 @@
+<%if @pagetitle %>
+<% @nextpage = params[:pagenumber] %>
+<% url = @nextpage %>
+<% @doc = Nokogiri::HTML(open(url))  %>
+<% @damnumber = pagenumber.to_i %>
+
+
+<h1><%= pagenumber  %></h1>
+
+
+<% @doc.css(".result_table_row").each do |item| %>
+<div class="resultbox shadow">
+<img class="resultimgbox" src="http://catalog.tadl.org/<%= item.at_css(".result_table_pic").attr('src') %>">
+<br />
+<h2 class="resulttitle"><img src="http://catalog.tadl.org/<%= item.at_css(".result_table_title_cell img").attr('src')  %>"><%= truncate(item.at_css(".bigger").text, :length => 200) %></h2><h3 class="resultauthor"><%= truncate(item.at_css('[@name="item_author"]').text) %></h3>
+<br />
+<p class="resultabstract">
+<%= item.at_css(".result_table_summary").text  %>
+</p>
+<div class="bottomstuff">
+<a href class="hold_button" src="#">Place Hold</a>
+<a class="hold_button iteminfo fancybox.iframe" href="http://catalog.tadl.org/eg/opac/record/<%= item.at_css(".search_link").attr('name').sub!(/record_/, "")  %>">See More</a>
+<a href class="hold_button" src="#">Add to List</a>
+
+<div style=" clear: both;"></div>
+<p class="resultcount">
+
+<% if item.at_css(".result_count") %>
+<%= item.at_css(".result_count").text %>
+<% else %>
+<% end %>
+<br />
+<% if item.at_css('[@name="bib_cn_list"]') %>
+<%= item.at_css('[@name="bib_cn_list"]').text %>
+<% else %>
+<% end %>
+
+
+</p>
+</div>
+
+<div style=" clear: both;"></div>
+</div>
+  
+<% end %>
+
+<div style=" clear: both;"></div>
+
+<div class="load_more" class="shadow">
+
+<a onclick="loadmore();">LOAD MORE RESULTS</a>
+
+</div>
+
+
+
+
+<% else %>
+
+<% @pagenumber = params[:pagenumber] %>
+
+<h1> <%= @pagenumber %> </h1>
+<% end %>

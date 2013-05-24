@@ -15,7 +15,6 @@ else
 end    
 
 if params[:mt].present?    
-  
     if params[:mt] == "MOVIES"
     @mediatype = "format=g"
     @fdefault ="MOVIES"    
@@ -32,23 +31,29 @@ if params[:mt].present?
     @mediatype = "format="
     @fdefault = "ALL" 
     end
-    
-
-
 end
-
-    
-if params[:q].present? 
+  
+if params[:q].present? && params[:mt].present?
 
 @pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=' + @searchqueryclearned + '&qtype=keyword&fi%3A'+ @mediatype +'&locg=22&limit=30'
 url = @pagetitle
 @doc = Nokogiri::HTML(open(url))
-else
-url = "http://catalog.tadl.org"
+
+
+elsif params[:mt].present?
+@pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=&qtype=keyword&fi%3A'+ @mediatype +'&locg=22&limit=30'
+url = @pagetitle
 @doc = Nokogiri::HTML(open(url))  
+@pagenumber = @doc.at_css(".results-paginator-selected").text rescue nil
 end
+end
+
+def showmore
 end
 
   def about
   end
+  
+
+  
 end

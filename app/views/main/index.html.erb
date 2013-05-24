@@ -14,10 +14,13 @@
 </div>
 
 <div class="spacer"></div>
+<% if @doc %>
+
 <div id="content">
-
-
-
+<% pagenumber = 1 %>
+<h1> <%= pagenumber %> </h1>
+<div>
+<div>
 <% @doc.css(".result_table_row").each do |item| %>
 <div class="resultbox shadow">
 <img class="resultimgbox" src="http://catalog.tadl.org/<%= item.at_css(".result_table_pic").attr('src') %>">
@@ -61,17 +64,20 @@
 <div style=" clear: both;"></div>
 
 
+
 <% if @doc.css(".result_count") %>
 <% @doc.css(".search_page_nav_link:not(.invisible)").first(1).each do |navlink| %>
 <% navlinktext = navlink.at_css(".nav_arrow_fix:not(.invisible)").text rescue nil%>
 <% if navlinktext == "►" %>
-<div id="load_more" class="shadow">
-<div class="load_more_p">
-<a href="">LOAD MORE RESULTS</a>
-<div id="loadmoreajaxloader" style="display:none;"><center></center></div>
+<div class="load_more" class="shadow">
+<div>
+<a onclick="loadmore();">LOAD MORE RESULTS</a>
 </div>
 </div>
 </div>
+
+
+
 <% else %>
 <% end %>
 <% end %>
@@ -79,33 +85,19 @@
 <% end %>
 
 
-<script type="text/javascript">
-$(window).scroll(function()
-{
-    if($(window).scrollTop() == $(document).height() - $(window).height())
-    {
-        $('div#loadmoreajaxloader').show();
-        $.ajax({
-        url: "loadmore.php",
-        success: function(html)
-        {
-            if(html)
-            {
-                $("#postswrapper").append(html);
-                $('div#loadmoreajaxloader').hide();
-            }else
-            {
-                $('div#loadmoreajaxloader').html('<center>No more posts to show.</center>');
-            }
-        }
-        });
-    }
-});
+<% else %>
+<% end %>
+
+ <script>
+ var pagecount = 0;
+ function loadmore(){
+       pagecount++;  
+   $.get("/main/_showmore/" + pagecount, function(data){$('#content').append($(data))});
+
+   
+   
+}
 </script>
-
-
-
-
 
    <script type = "text/javascript">
 $(document).ready(function() {

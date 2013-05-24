@@ -3,6 +3,8 @@ Ilscatcher::Application.routes.draw do
 
   get "main/about"
   root :to => 'main#index'
+  
+  match ':controller/:action/:pagenumber'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
