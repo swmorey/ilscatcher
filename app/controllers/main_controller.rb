@@ -38,13 +38,17 @@ if params[:q].present? && params[:mt].present?
 @pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=' + @searchqueryclearned + '&qtype=keyword&fi%3A'+ @mediatype +'&locg=22&limit=30'
 url = @pagetitle
 @doc = Nokogiri::HTML(open(url))
-
-
+@pagenumber = @doc.at_css(".results-paginator-selected").text rescue nil
+@querytitle = @pagetitle.gsub("http://catalog.tadl.org/", '') 
+@cleanquerytitle = CGI::escape(@querytitle)
 elsif params[:mt].present?
 @pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=&qtype=keyword&fi%3A'+ @mediatype +'&locg=22&limit=30'
 url = @pagetitle
 @doc = Nokogiri::HTML(open(url))  
 @pagenumber = @doc.at_css(".results-paginator-selected").text rescue nil
+@querytitle = @pagetitle.gsub("http://catalog.tadl.org/", '"') 
+@cleanquerytitle = CGI::escape(@querytitle)
+
 end
 end
 

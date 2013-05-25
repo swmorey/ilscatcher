@@ -1,11 +1,12 @@
-<%if @pagetitle %>
+
 <% @nextpage = params[:pagenumber] %>
-<% url = @nextpage %>
+<% @stagetitle = params[:querytitle] %>
+<% @cleantitle = CGI.unescape(@stagetitle) %>
+<% @pagetitle = "http://catalog.tadl.org/"+ @cleantitle +";page="+ @nextpage +"" %>  
+<% url = @pagetitle %>
 <% @doc = Nokogiri::HTML(open(url))  %>
-<% @damnumber = pagenumber.to_i %>
 
 
-<h1><%= pagenumber  %></h1>
 
 
 <% @doc.css(".result_table_row").each do |item| %>
@@ -55,9 +56,3 @@
 
 
 
-<% else %>
-
-<% @pagenumber = params[:pagenumber] %>
-
-<h1> <%= @pagenumber %> </h1>
-<% end %>
