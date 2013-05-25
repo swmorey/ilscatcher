@@ -2,10 +2,13 @@
 
 <%= form_tag("/main/index", :method => "get", :id => "searchform") do %>
   <%= label_tag(:q, "SEARCH:") %>
-  <%= text_field_tag(:q, @searchquery, :class => 'searchform') %>
-  <%= label_tag(:q, "FORMATS:") %>
+  <%= text_field_tag(:q, @searchquery, :class => 'searchform', :value => params[:q]) %>
+  <%= label_tag(:mt, "FORMATS:") %>
   <%= select_tag :mt, options_for_select([ "ALL", "BOOKS", "MOVIES", "MUSIC", "VIDEO GAMES" ], @fdefault), :class => 'format_select'  %>
+
  <%= link_to 'GO', "#", :onclick => "$('#searchform').submit()", :class => 'searchbutton' %>
+ <%= check_box_tag :avail, true, !!params[:avail] %>
+<%= label_tag(:avail, "ONLY SHOW AVAILABLE ITEMS") %>
 <% end %>
 
 
