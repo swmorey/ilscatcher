@@ -46,7 +46,7 @@ elsif params[:mt].present?
 url = @pagetitle
 @doc = Nokogiri::HTML(open(url))  
 @pagenumber = @doc.at_css(".results-paginator-selected").text rescue nil
-@querytitle = @pagetitle.gsub("http://catalog.tadl.org/", '"') 
+@querytitle = @pagetitle.gsub("http://catalog.tadl.org/", '') 
 @cleanquerytitle = CGI::escape(@querytitle)
 
 end

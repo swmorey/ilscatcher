@@ -17,8 +17,7 @@
 <% if @doc %>
 
 <div id="content">
-<% pagenumber = 1 %>
-<h1> <%= @cleanquerytitle %> </h1>
+
 <div>
 <div>
 <% @doc.css(".result_table_row").each do |item| %>
@@ -58,7 +57,7 @@
 </div>
   
 <% end %>
-
+<div id="showmore"></div>
 
 
 <div style=" clear: both;"></div>
@@ -93,7 +92,7 @@
  var pagecount = 0;
  function loadmore(){
        pagecount++;  
-   $.get("/main/_showmore/" + pagecount + "/" + querytitle, function(data){$('#content').append($(data))});
+   $.get("/main/_showmore/" + pagecount + "/" + querytitle, function(data){$('#showmore').append($(data))});
 
    
    

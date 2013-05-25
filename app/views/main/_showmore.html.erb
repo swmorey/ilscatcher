@@ -1,8 +1,8 @@
 
 <% @nextpage = params[:pagenumber] %>
 <% @stagetitle = params[:querytitle] %>
-<% @cleantitle = CGI.unescape(@stagetitle) %>
-<% @pagetitle = "http://catalog.tadl.org/"+ @cleantitle +";page="+ @nextpage +"" %>  
+
+<% @pagetitle = "http://catalog.tadl.org/"+ @stagetitle +";page="+ @nextpage +"" %>  
 <% url = @pagetitle %>
 <% @doc = Nokogiri::HTML(open(url))  %>
 
@@ -47,11 +47,6 @@
 
 <div style=" clear: both;"></div>
 
-<div class="load_more" class="shadow">
-
-<a onclick="loadmore();">LOAD MORE RESULTS</a>
-
-</div>
 
 
 
