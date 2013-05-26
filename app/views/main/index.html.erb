@@ -72,8 +72,11 @@
 <% navlinktext = navlink.at_css(".nav_arrow_fix:not(.invisible)").text rescue nil%>
 <% if navlinktext == "►" %>
 <div class="load_more" class="shadow">
-<div>
+<div id="loadmoretext">
 <a onclick="loadmore();">LOAD MORE RESULTS</a>
+</div>
+<div id="loadmoreanimation">
+<h1>SEE ME</h1>
 </div>
 </div>
 </div>
@@ -96,10 +99,13 @@
  function loadmore(){
        pagecount++;  
    $.get("/main/_showmore/" + pagecount + "/" + querytitle, function(data){$('#showmore').append($(data))});
+   }
+$('#loadmoreanimation').hide().ajaxStart( function() {
+$(this).show();  // show Loading Div
+} ).ajaxStop ( function(){
+$(this).hide(); // hide loading div
+});
 
-   
-   
-}
 </script>
 
    <script type = "text/javascript">
