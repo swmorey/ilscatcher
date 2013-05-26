@@ -13,9 +13,9 @@ group :development do
 gem 'sqlite3-ruby'
 end
 
-
-
 gem 'nokogiri'
+
+gem 'unicorn'
 
 
 # Gems used only for assets and not required
