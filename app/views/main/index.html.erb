@@ -7,8 +7,15 @@
   <%= select_tag :mt, options_for_select([ "ALL", "BOOKS", "MOVIES", "MUSIC", "VIDEO GAMES" ], @fdefault), :class => 'format_select'  %>
 
  <%= link_to 'GO', "#", :onclick => "$('#searchform').submit()", :class => 'searchbutton' %>
+<a id="searchoptionstoggle" onclick="togglesearchoptions()"><img style="margin-right: 7px; margin-left: 7px; height: 15px; width: 15px;" src="http://empower.swmorey.com/images/settingsicon.png"> SEARCH OPTIONS </a> 
+
+<div id="searchoptions" style="display:<%= @searchoptiontoggle %>; margin-top: 5px;">
+
+<%= label_tag(:sort, "SORT BY:") %>
+<%= select_tag :sort, options_for_select([ "RELEVANCE", "NEWEST TO OLDEST", "OLDEST TO NEWEST"], @sortdefault), :class => 'format_select'  %>
  <%= check_box_tag :avail, true, !!params[:avail] %>
-<%= label_tag(:avail, "ONLY SHOW AVAILABLE ITEMS") %>
+<%= label_tag(:avail, "ONLY AVAILABLE") %>
+</div>
 <% end %>
 
 
@@ -93,7 +100,6 @@
  <script>
  var querytitle = "<%= @cleanquerytitle %>";
  var pagecount = 0;
- $('.loadmoretext').append('<h1>Test</h1>');
  function loadmore(){
        pagecount++;  
     $('#loadmoretext').empty().append('<a class="loadmore"><img style="margin-right: 10px; margin-left: 10px;" src="http://empower.swmorey.com/images/ajax-loader-2.gif">LOADING...</a>').trigger("create");    
@@ -106,6 +112,16 @@
 
   
    }
+</script>
+
+<script>
+function togglesearchoptions(){
+$("#searchoptions").toggle(function () {
+    $('.searchoption').css('display', 'block');
+}, function () {
+    $('.searchoptions').css('display', 'none');
+});
+ }
 </script>
 
    <script type = "text/javascript">

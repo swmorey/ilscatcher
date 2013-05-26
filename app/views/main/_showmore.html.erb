@@ -2,12 +2,12 @@
 <% @nextpage = params[:pagenumber] %>
 <% @stagetitle = params[:querytitle] %>
 
-<% @pagetitle = "http://catalog.tadl.org/"+ @stagetitle +";page="+ @nextpage +"" %>  
+<% @pagetitle = "http://catalog.tadl.org/"+ @stagetitle +"&page="+ @nextpage +"" %>  
 <% url = @pagetitle %>
 <% @doc = Nokogiri::HTML(open(url))  %>
 
 
-
+<h1><%= @pagetitle %></h1>
 
 <% @doc.css(".result_table_row").each do |item| %>
 <div class="resultbox shadow">

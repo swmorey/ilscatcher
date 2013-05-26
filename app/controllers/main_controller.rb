@@ -8,11 +8,35 @@ require 'open-uri'
   def index
   
 if params[:q].present?
+if params[:st] == "TITLE"
 @searchquery = params[:q]
 @searchqueryclearned = CGI::escape(@searchquery)    
+elsif 
+@searchquery = params[:q]
+@searchquerysharp = "\"#{@searchquery}\""
+@searchqueryclearned = CGI::escape(@searchquerysharp)   
+end
 else
 @searchqueryclearned = ""       
 end    
+
+if params[:sort].present?
+ if params[:sort] == "RELEVANCE"
+    @sorttype = "&sort="
+    @sortdefault ="RELEVANCE" 
+    elsif params[:sort] == "NEWEST TO OLDEST"
+    @sorttype = "&sort=pubdate.descending"
+    @sortdefault ="NEWEST TO OLDEST" 
+    elsif params[:sort] == "OLDEST TO NEWEST"
+    @sorttype = "&sort=pubdate"
+    @sortdefault ="OLDEST TO NEWEST" 
+    elsif
+    @sorttype = "&sort="
+    @sortdefault ="RELEVANCE" 
+    end
+else
+@sorttype=""
+end
 
 if params[:mt].present?    
     if params[:mt] == "MOVIES"
@@ -33,27 +57,51 @@ if params[:mt].present?
     end
 end
 
+if params[:st].present? 
+if params[:st] == "KEYWORD"
+@searchby = "&qtype=keyword"
+@stdefault = "KEYWORD"
+elsif params[:st] == "TITLE"
+@searchby = "&qtype=title"
+@stdefault = "TITLE"
+elsif params[:st] == "AUTHOR/ARTIST"
+@searchby = "&qtype=author"
+@stdefault = "AUTHOR/ARTIST"
+end
+else
+@searchby = "&qtype=keyword"
+@stdefault = "KEYWORD"
+end
+
 if params[:avail]
 @avail = "&modifier=available"
 else
 @avail = ""
 end
+
+if params[:avail] or params[:st] or params[:sort]
+@searchoptiontoggle = "block"
+else
+@searchoptiontoggle = "none"
+end
   
 if params[:q].present? && params[:mt].present?
 
-@pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=' + @searchqueryclearned + '&qtype=keyword&fi%3A'+ @mediatype +''+ @avail +'&locg=22&limit=24'
+@pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=' + @searchqueryclearned + '' +  @searchby + '&fi%3A'+ @mediatype +''+ @avail +'&locg=22&limit=24' + @sorttype +''
 url = @pagetitle
 @doc = Nokogiri::HTML(open(url))
 @pagenumber = @doc.at_css(".results-paginator-selected").text rescue nil
 @querytitle = @pagetitle.gsub("http://catalog.tadl.org/", '') 
-@cleanquerytitle = CGI::escape(@querytitle)
+@querytitle2 = @querytitle.gsub(".", '%2E')  
+@cleanquerytitle = CGI::escape(@querytitle2)
 elsif params[:mt].present?
-@pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=&qtype=keyword&fi%3A'+ @mediatype +''+ @avail +'&locg=22&limit=24'
+@pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=&qtype=keyword&fi%3A'+ @mediatype +''+ @avail +'&locg=22&limit=24' + @sorttype +''
 url = @pagetitle
 @doc = Nokogiri::HTML(open(url))  
 @pagenumber = @doc.at_css(".results-paginator-selected").text rescue nil
 @querytitle = @pagetitle.gsub("http://catalog.tadl.org/", '') 
-@cleanquerytitle = CGI::escape(@querytitle)
+@querytitle2 = @querytitle.gsub(".", '%2E')  
+@cleanquerytitle = CGI::escape(@querytitle2)
 
 end
 end

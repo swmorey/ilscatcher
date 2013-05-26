@@ -20,7 +20,7 @@ html {
 			min-width: 460px;
 			margin: 0;
 			padding: 5px;
-			height: 40px;
+			height: auto;
 			background: url('http://empower.swmorey.com/images/binding_dark.png'); 
 			color: #fff;
 			font-size: 20px;
@@ -28,6 +28,12 @@ html {
 			font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
 			opacity:0.9;
             filter:alpha(opacity=90);
+            
+		}
+		
+		#contents {
+		margin-top:20px;
+		
 		}
 
 .load_more
@@ -66,7 +72,7 @@ margin-left: 15px;
 
 	
 .searchform {
-  width:300px;
+  width:250px;
   height: 27px;
   	font-size: 20px;
 			font-weight: bold;
@@ -91,7 +97,7 @@ margin-left: 15px;
 
 .spacer
 {
-height: 45px;
+height: 70px;
 }
 
 
