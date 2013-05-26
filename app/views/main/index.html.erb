@@ -96,9 +96,11 @@
  $('.loadmoretext').append('<h1>Test</h1>');
  function loadmore(){
        pagecount++;  
-    $('#loadmoretext').empty().append('<a>Loading...</a>');    
+    $('#loadmoretext').empty().append('<a class="loadmore"><img style="margin-right: 10px; margin-left: 10px;" src="http://empower.swmorey.com/images/ajax-loader-2.gif">LOADING...</a>').trigger("create");    
+    $('#loadmoretext').trigger("create");  
    $.get("/main/_showmore/" + pagecount + "/" + querytitle, function(data){$('#showmore').append($(data))}).promise().done(function() {
-         $('#loadmoretext').empty().append('<a onclick="loadmore();">LOAD MORE RESULTS</a>');     
+         $('#loadmoretext').empty().append('<a class="loadmore" onclick="loadmore();">LOAD MORE RESULTS</a>');     
+         $('#loadmoretext').trigger("create"); 
       });
 
 

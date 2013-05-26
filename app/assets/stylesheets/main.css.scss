@@ -50,17 +50,18 @@ height: 35px;
 }		
 
 
-.load_more a:link {text-decoration:none; color: #000;}
+.load_more a:link {text-decoration:none; color: #000; margin-right: 10px;}
 .load_more a:visited {text-decoration:none; color: #000;}
 .load_more a:hover {text-decoration:underline;}
 .load_more a:active {text-decoration:underline;}
 
-#loadmoretext {
+.load_more img {margin-left: 20px;}
 
-}
 
-#loadmoreanimation {
 
+
+#loadmoreanimation img {
+margin-left: 15px;
 }
 
 	
