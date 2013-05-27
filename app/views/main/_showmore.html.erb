@@ -7,7 +7,7 @@
 <% @doc = Nokogiri::HTML(open(url))  %>
 
 
-<h1><%= @pagetitle %></h1>
+
 
 <% @doc.css(".result_table_row").each do |item| %>
 <div class="resultbox shadow">
