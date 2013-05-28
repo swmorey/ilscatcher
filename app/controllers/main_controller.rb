@@ -79,11 +79,7 @@ else
 @avail = ""
 end
 
-if params[:avail] or params[:st] or params[:sort]
-@searchoptiontoggle = "block"
-else
-@searchoptiontoggle = "none"
-end
+
   
 if params[:q].present? && params[:mt].present?
 

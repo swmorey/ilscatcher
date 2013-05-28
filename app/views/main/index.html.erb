@@ -1,21 +1,26 @@
 <div id="header">
 
 <%= form_tag("/main/index", :method => "get", :id => "searchform") do %>
-  <%= label_tag(:q, "SEARCH:") %>
+<div class="selectgroup">
+  <%= label_tag(:q, "SEARCH:",  :class => 'formlabel') %>
   <%= text_field_tag(:q, @searchquery, :class => 'searchform', :value => params[:q]) %>
-  <%= label_tag(:mt, "FORMATS:") %>
-  <%= select_tag :mt, options_for_select([ "ALL", "BOOKS", "MOVIES", "MUSIC", "VIDEO GAMES" ], @fdefault), :class => 'format_select'  %>
-
- <%= link_to 'GO', "#", :onclick => "$('#searchform').submit()", :class => 'searchbutton' %>
-<a id="searchoptionstoggle" onclick="togglesearchoptions()"><img style="margin-right: 7px; margin-left: 7px; height: 15px; width: 15px;" src="http://empower.swmorey.com/images/settingsicon.png"> SEARCH OPTIONS </a> 
-
-<div id="searchoptions" style="display:<%= @searchoptiontoggle %>; margin-top: 5px;">
-
-<%= label_tag(:sort, "SORT BY:") %>
-<%= select_tag :sort, options_for_select([ "RELEVANCE", "NEWEST TO OLDEST", "OLDEST TO NEWEST"], @sortdefault), :class => 'format_select'  %>
- <%= check_box_tag :avail, true, !!params[:avail] %>
-<%= label_tag(:avail, "ONLY AVAILABLE") %>
+ <%= link_to 'GO', "#", :onclick => "$('#searchform').submit()", :class => 'formlabel' %>
 </div>
+
+
+<div class="selectgroup">
+<%= label_tag(:mt, "FORMATS:", :class => 'formlabel') %>
+  <%= select_tag :mt, options_for_select([ "ALL", "BOOKS", "MOVIES", "MUSIC", "VIDEO GAMES" ], @fdefault), :class => 'format_select'  %>
+</div>
+<div class="selectgroup">
+<%= label_tag(:sort, "SORT BY:", :class => 'formlabel') %>
+<%= select_tag :sort, options_for_select([ "RELEVANCE", "NEWEST TO OLDEST", "OLDEST TO NEWEST"], @sortdefault), :class => 'format_select'  %>
+ </div>
+ <div class="selectgroup">
+ <%= check_box_tag :avail, true, !!params[:avail] %>
+<%= label_tag(:avail, "ONLY SHOW AVAILABLE", :class => 'formlabel') %>
+ </div>
+
 <% end %>
 
 
@@ -114,15 +119,6 @@
    }
 </script>
 
-<script>
-function togglesearchoptions(){
-$("#searchoptions").toggle(function () {
-    $('.searchoption').css('display', 'block');
-}, function () {
-    $('.searchoptions').css('display', 'none');
-});
- }
-</script>
 
    <script type = "text/javascript">
 $(document).ready(function() {
