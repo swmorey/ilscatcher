@@ -1,6 +1,6 @@
 Ilscatcher::Application.routes.draw do
   get "main/index"
-
+  get "main/searchjson"
   get "main/about"
   root :to => 'main#index'
   
