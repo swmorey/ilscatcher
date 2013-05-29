@@ -191,17 +191,21 @@ url = @pagetitle
 end
 
 @itemlist = @doc.css(".result_table_row").map do |item| 
-{ :title => item.at_css(".bigger").text.strip, 
+{
+item:
+{
+:title => item.at_css(".bigger").text.strip, 
 :author => item.at_css('[@name="item_author"]').text.strip,
 :summary => item.at_css(".result_table_summary").text.strip,
 :availability => item.at_css(".result_count").try(:text).try(:strip),
 :callnumber => item.at_css('[@name="bib_cn_list"]').try(:text).try(:gsub!, /\n/," ").try(:squeeze),
 :record_id => item.at_css(".search_link").attr('name').sub!(/record_/, "")
 }
+}
 end 
 
 respond_to do |format|
-format.json { render :json => @itemlist }
+format.json { render :json => Oj.dump(items: @itemlist) }
 end
 end
 
