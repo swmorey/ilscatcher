@@ -10,14 +10,8 @@ require 'oj'
   def index
   
 if params[:q].present?
-if params[:st] == "TITLE"
 @searchquery = params[:q]
 @searchqueryclearned = CGI::escape(@searchquery)    
-elsif 
-@searchquery = params[:q]
-@searchquerysharp = "\"#{@searchquery}\""
-@searchqueryclearned = CGI::escape(@searchquerysharp)   
-end
 else
 @searchqueryclearned = ""       
 end    
@@ -114,14 +108,8 @@ def searchjson
 
  
 if params[:q].present?
-if params[:st] == "TITLE"
 @searchquery = params[:q]
 @searchqueryclearned = CGI::escape(@searchquery)    
-elsif 
-@searchquery = params[:q]
-@searchquerysharp = "\"#{@searchquery}\""
-@searchqueryclearned = CGI::escape(@searchquerysharp)   
-end
 else
 @searchqueryclearned = ""       
 end    
