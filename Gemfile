@@ -14,7 +14,7 @@ gem 'sqlite3-ruby'
 end
 
 gem 'nokogiri'
-
+gem 'oj'
 gem 'unicorn'
 gem 'newrelic_rpm'
 

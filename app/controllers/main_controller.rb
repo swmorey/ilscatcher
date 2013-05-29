@@ -3,6 +3,7 @@ respond_to :html, :json
 require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
+require 'oj'
 
 
 
@@ -194,17 +195,11 @@ if params[:q].present?
 url = @pagetitle
 @doc = Nokogiri::HTML(open(url))
 @pagenumber = @doc.at_css(".results-paginator-selected").text rescue nil
-@querytitle = @pagetitle.gsub("http://catalog.tadl.org/", '') 
-@querytitle2 = @querytitle.gsub(".", '%2E')  
-@cleanquerytitle = CGI::escape(@querytitle2)
 elsif params[:mt].present?
 @pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=&qtype=keyword&fi%3A'+ @mediatype +''+ @avail +'&locg=22&limit=24' + @sorttype +''
 url = @pagetitle
 @doc = Nokogiri::HTML(open(url))  
 @pagenumber = @doc.at_css(".results-paginator-selected").text rescue nil
-@querytitle = @pagetitle.gsub("http://catalog.tadl.org/", '') 
-@querytitle2 = @querytitle.gsub(".", '%2E')  
-@cleanquerytitle = CGI::escape(@querytitle2)
 end
 
 @itemlist = @doc.css(".result_table_row").map do |item| 
@@ -218,7 +213,7 @@ end
 end 
 
 respond_to do |format|
-format.json { render :json => @itemlist.to_json }
+format.json { render :json => @itemlist }
 end
 end
 

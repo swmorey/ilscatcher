@@ -56,6 +56,7 @@ GEM
     multi_json (1.7.3)
     newrelic_rpm (3.6.2.96)
     nokogiri (1.5.9)
+    oj (2.0.14)
     pg (0.15.1)
     polyglot (0.3.3)
     rack (1.4.5)
@@ -119,6 +120,7 @@ DEPENDENCIES
   jquery-rails
   newrelic_rpm
   nokogiri
+  oj
   pg
   rails (= 3.2.11)
   sass-rails (~> 3.2.3)
