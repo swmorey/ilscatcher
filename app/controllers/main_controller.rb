@@ -204,10 +204,23 @@ item:
 }
 end 
 
+if @itemlist.count == 0
+
 respond_to do |format|
-format.json { render :json => Oj.dump(items: @itemlist) }
+format.json { render :json => { :status => :error, :message => "no results" }}
+end
+
+
+else
+
+respond_to do |format|
+format.json { render :json => Oj.dump(items: @itemlist )  }
+end
+
 end
 end
+
+
 
   
 
