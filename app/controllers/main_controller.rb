@@ -105,7 +105,7 @@ def about
 end
 
 def searchjson
-
+headers['Access-Control-Allow-Origin'] = "*"
  
 if params[:q].present?
 @searchquery = params[:q]

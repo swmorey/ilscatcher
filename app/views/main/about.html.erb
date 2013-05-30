@@ -30,7 +30,7 @@
 
         var searchquery = $('#term').val();
 	
-			$.getJSON("/main/searchjson.json?utf8=%E2%9C%93&q=" + searchquery, function(data) {
+			$.getJSON("http://ilscatcher.herokuapp.com/main/searchjson.json?utf8=%E2%9C%93&q=" + searchquery, function(data) {
 			   var results = data.message
 			   if (results != "no results") {
                  var template = $('#results-template').html();
