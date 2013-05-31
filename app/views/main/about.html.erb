@@ -4,8 +4,9 @@
    </section>
 
 <h2>Results</h2>
-	<div id="results">
+<div id="results">
 	</div>
+	
 	
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.0/mustache.min.js"></script>
 	<script id="results-template" type="text/template">
@@ -20,15 +21,25 @@
 		
 		{{/:items}}
 	</script>
-	<script>
 
+
+<div class="load_more" class="shadow">
+<div id="loadmoretext">
+<a onclick="loadmore();">LOAD MORE RESULTS</a>
+</div>
+</div>
+
+
+	<script>
+    var searchquery = {};
+    var pagecount = {};
 	$(document).ready(function(){
 	
 	 var getResults = function(){
-
+       pagecount = 0;
         $('#results').html("<h2 class='no_results'>Loading...</h2>");
 
-        var searchquery = $('#term').val();
+        searchquery = $('#term').val();
 	
 			$.getJSON("http://ilscatcher.herokuapp.com/main/searchjson.json?utf8=%E2%9C%93&q=" + searchquery, function(data) {
 			   var results = data.message
@@ -39,7 +50,7 @@
                 } 
                   else 
                   {
-		          $('#results').html("<h2>No Results</h2>");  	
+		          $('#loadmoretext').html("No Further Results");  	
 			 }
 			
 			});
@@ -49,3 +60,29 @@
 		  $('#search').click(getResults);
 		  	});
 	</script>
+	
+	
+	 <script>
+ var pagecount = 0;
+ function loadmore(){
+       pagecount++;  
+    $('#loadmoretext').empty().append('<a class="loadmore"><img style="margin-right: 10px; margin-left: 10px;" src="http://empower.swmorey.com/images/ajax-loader-2.gif">LOADING...</a>').trigger("create");    
+    $('#loadmoretext').trigger("create");  
+   $.get("http://localhost:4000/main/searchjson.json?utf8=%E2%9C%93&q=" + searchquery + "/page=" + pagecount, function(data){
+   var results = data.message
+			   if (results != "no results") {
+                 var template = $('#results-template').html();
+			    var info = Mustache.to_html(template, data);
+			     $('#results').append(info).promise().done(function() {
+         $('#loadmoretext').empty().append('<a class="loadmore" onclick="loadmore();">LOAD MORE RESULTS</a>');     
+         $('#loadmoretext').trigger("create"); 
+      })}
+                  else 
+                  {
+		          $('#results').html("<h2>No Results</h2>");  	
+			 }
+			 });
+
+  
+   }
+</script>
