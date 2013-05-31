@@ -1,11 +1,23 @@
    <section id="fetch">
       <input type="text" placeholder="Search..." id="term" />
       <button id="search">Go</button>
+      <input type="checkbox" id="available" value="false">ONLY AVAILABLE<br>
+      <select id="mediatype">
+     <option value="ALL">ALL</option>
+     <option value="BOOKS">BOOKS</option>
+     <option value="MOVIES">MOVIES</option>
+     <option value="MUSIC">MUSIC</option>
+     <option value="VIDEO GAMES">VIDEO GAMES</option>
+      </select>
+   
+   
+   
    </section>
 
-<h2>Results</h2>
-	<div id="results">
+
+<div id="results">
 	</div>
+	
 	
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.0/mustache.min.js"></script>
 	<script id="results-template" type="text/template">
@@ -20,27 +32,45 @@
 		
 		{{/:items}}
 	</script>
+
+
+<div class="load_more" class="shadow">
+<div id="loadmoretext">
+<a onclick="loadmore();">LOAD MORE RESULTS</a>
+</div>
+</div>
+
+
 	<script>
+    var searchquery = {};
+    var pagecount = {};
+    var mediatype = {};
+    var available = {};
 	$(document).ready(function(){
 	
 	 var getResults = function(){
-
+       pagecount = 0;
         $('#results').html("<h2 class='no_results'>Loading...</h2>");
 
-        var searchquery = $('#term').val();
-	
-			$.getJSON("/main/searchjson.json?utf8=%E2%9C%93&q=" + searchquery, function(data) {
-			
-			var response = JSON.stringify(data);
-			
-			   if (response.length === 0) {
-                    $('#results').html("<h2>No Results</h2>");
+        searchquery = $('#term').val();
+	    mediatype = $('#mediatype').val();
+	    if (document.getElementById('available').checked){
+         available = true 
+        }else{
+         available = false
+         };
+	    
+
+			$.getJSON("http://ilscatcher.herokuapp.com/main/searchjson.json?utf8=%E2%9C%93&q=" + searchquery + "&mt=" + mediatype +"&avail=" + available, function(data) {
+			   var results = data.message
+			   if (results != "no results") {
+                 var template = $('#results-template').html();
+			    var info = Mustache.to_html(template, data);
+			    $('#results').html(info);
                 } 
                   else 
                   {
-	         var template = $('#results-template').html();
-			    var info = Mustache.to_html(template, data);
-			    $('#results').html(info);
+		          $('#results').html("No Results");  	
 			 }
 			
 			});
@@ -50,3 +80,25 @@
 		  $('#search').click(getResults);
 		  	});
 	</script>
+	
+	 <script>
+ function loadmore(){
+       pagecount++;  
+    $('#loadmoretext').empty().append('<a class="loadmore"><img style="margin-right: 10px; margin-left: 10px;" src="http://empower.swmorey.com/images/ajax-loader-2.gif">LOADING...</a>').trigger("create");    
+    $('#loadmoretext').trigger("create");  
+   $.get("http://ilscatcher.herokuapp.com/main/searchjson.json?utf8=%E2%9C%93&q=" + searchquery + "&mt=" + mediatype + "&p=" + pagecount +"&avail=" + available, function(data){
+   var results = data.message
+			   if (results != "no results") {
+                 var template = $('#results-template').html();
+			    var info = Mustache.to_html(template, data);
+			     $('#results').append(info).promise().done(function() {
+         $('#loadmoretext').empty().append('<a class="loadmore" onclick="loadmore();">LOAD MORE RESULTS</a>');     
+         $('#loadmoretext').trigger("create"); 
+      })}
+                  else 
+                  {
+		          $('#loadmoretext').html("No Further Results");  	
+			 }
+			 });
+   }
+</script>

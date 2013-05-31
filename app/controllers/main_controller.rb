@@ -105,7 +105,7 @@ def about
 end
 
 def searchjson
-
+headers['Access-Control-Allow-Origin'] = "*"
  
 if params[:q].present?
 @searchquery = params[:q]
@@ -113,6 +113,12 @@ if params[:q].present?
 else
 @searchqueryclearned = ""       
 end    
+
+if params[:p].present?
+@nextpage = params[:p]
+else
+@nextpage = "0"
+end
 
 if params[:sort].present?
  if params[:sort] == "RELEVANCE"
@@ -169,7 +175,7 @@ else
 @stdefault = "KEYWORD"
 end
 
-if params[:avail]
+if params[:avail] == "true"
 @avail = "&modifier=available"
 else
 @avail = ""
@@ -179,12 +185,12 @@ end
   
 if params[:q].present? 
 
-@pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=' + @searchqueryclearned + '' +  @searchby + '&fi%3A'+ @mediatype +''+ @avail +'&locg=22&limit=24' + @sorttype +''
+@pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=' + @searchqueryclearned + '' +  @searchby + '&fi%3A'+ @mediatype +''+ @avail +'&locg=22&limit=24'+ @sorttype +'&page='+ @nextpage 
 url = @pagetitle
 @doc = Nokogiri::HTML(open(url))
 @pagenumber = @doc.at_css(".results-paginator-selected").text rescue nil
 elsif params[:mt].present?
-@pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=&qtype=keyword&fi%3A'+ @mediatype +''+ @avail +'&locg=22&limit=24' + @sorttype +''
+@pagetitle = 'http://catalog.tadl.org/eg/opac/results?query=&qtype=keyword&fi%3A'+ @mediatype +''+ @avail +'&locg=22&limit=24'+ @sorttype +'&page='+ @nextpage 
 url = @pagetitle
 @doc = Nokogiri::HTML(open(url))  
 @pagenumber = @doc.at_css(".results-paginator-selected").text rescue nil
@@ -207,7 +213,7 @@ end
 if @itemlist.count == 0
 
 respond_to do |format|
-format.json { render :json => "" }
+format.json { render :json => { :status => :error, :message => "no results" }}
 end
 
 
@@ -220,6 +226,31 @@ end
 end
 end
 
+def itemdetails
+
+@record_id = params[:record_id]
+@pagetitle = 'http://catalog.tadl.org/eg/opac/record/' + @record_id + '?locg=22'
+url = @pagetitle
+@doc = Nokogiri::HTML(open(url)) 
+@record_details = @doc.css("#main-content").map do |detail|
+{
+:author => detail.at_css(".rdetail_authors_div").try(:text).try(:gsub!, /\n/," ").try(:squeeze),
+:title => detail.at_css("#rdetail_title").text,
+:summary => detail.at_css("#rdetail_summary_from_rec").try(:text).try(:strip),
+:record_id => @record_id,
+:copies_available => detail.at_css(".rdetail_aux_copycounts").try(:text).try(:strip),
+:copies_total => detail.at_css(".rdetail_aux_holdcounts").try(:text).try(:strip),
+:record_details => detail.at_css(".padding-ten.float-left").try(:text).try(:strip),
+:related_subjects => detail.at_css(".rdetail_subject_value").try(:text).try(:strip)
+}
+end
+
+respond_to do |format|
+format.json { render :json => Oj.dump(@record_details)  }
+end
+
+
+end
 
 
   
