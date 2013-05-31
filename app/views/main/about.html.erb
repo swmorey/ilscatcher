@@ -33,7 +33,7 @@
 			
 			var response = JSON.stringify(data);
 			
-			   if (response !== "") {
+			   if (response.length === 0) {
                     $('#results').html("<h2>No Results</h2>");
                 } 
                   else 
