@@ -202,10 +202,10 @@ end
 item:
 {
 :title => item.at_css(".bigger").text.strip, 
-:author => item.at_css('[@name="item_author"]').text.strip,
+:author => item.at_css('[@name="item_author"]').text.strip.try(:squeeze, " "),
 :summary => item.at_css(".result_table_summary").text.strip,
 :availability => item.at_css(".result_count").try(:text).try(:strip).try(:gsub!, /in TADL district./," "), 
-:callnumber => item.at_css('[@name="bib_cn_list"]').try(:text).try(:gsub!, /\n/," "),
+:callnumber => item.at_css('[@name="bib_cn_list"]').try(:text).try(:gsub!, /\n/," ").try(:squeeze, " "),
 :record_id => item.at_css(".search_link").attr('name').sub!(/record_/, "")
 }
 }
@@ -238,7 +238,7 @@ url = @pagetitle
 {
 item:
 {
-:author => detail.at_css(".rdetail_authors_div").try(:text).try(:gsub!, /\n/," ").try(:squeeze(" ")),
+:author => detail.at_css(".rdetail_authors_div").try(:text).try(:gsub!, /\n/," ").try(:squeeze, " "),
 :title => detail.at_css("#rdetail_title").text,
 :summary => detail.at_css("#rdetail_summary_from_rec").try(:text).try(:strip),
 :record_id => @record_id,
