@@ -23,15 +23,28 @@
 	<script id="results-template" type="text/template">
 
 		{{#:items}}
-	
+	<div onclick="showmore({{:item.:record_id}});">
 			<h3>{{:item.:title}}</h3>  
 			<h4>{{:item.:author}}</h4>
+		<div id="{{:item.:record_id}}">	
+		
+	</div>
+	</div>
+		{{/:items}}
+
+	</script>
+	
+	<script id="more_details-template" type="text/template">
+			
+			{{#:items}}
 			<p>
 			{{:item.:summary}}
 			</p>
-		
-		{{/:items}}
+			
+				{{/:items}}
 	</script>
+
+
 
 
 <div class="load_more" class="shadow">
@@ -86,7 +99,7 @@
        pagecount++;  
     $('#loadmoretext').empty().append('<a class="loadmore"><img style="margin-right: 10px; margin-left: 10px;" src="http://empower.swmorey.com/images/ajax-loader-2.gif">LOADING...</a>').trigger("create");    
     $('#loadmoretext').trigger("create");  
-   $.get("http://ilscatcher.herokuapp.com/main/searchjson.json?utf8=%E2%9C%93&q=" + searchquery + "&mt=" + mediatype + "&p=" + pagecount +"&avail=" + available, function(data){
+   $.get("http://catton.staff.lib.tadl.org:4000/main/searchjson.json?utf8=%E2%9C%93&q=" + searchquery + "&mt=" + mediatype + "&p=" + pagecount +"&avail=" + available, function(data){
    var results = data.message
 			   if (results != "no results") {
                  var template = $('#results-template').html();
@@ -101,4 +114,22 @@
 			 }
 			 });
    }
+</script>
+
+<script>
+function showmore(record_id){
+var record_id = record_id;
+
+
+
+$.getJSON("http://catton.staff.lib.tadl.org:4000/main/itemdetails.json?utf8=%E2%9C%93&record_id=" + record_id, function(data) {
+			   var results = data.message
+                 var template = $('#more_details-template').html();
+			    var info = Mustache.to_html(template, data);
+			    $('#'+ record_id +'').append(info);
+			    });
+
+};
+
+
 </script>

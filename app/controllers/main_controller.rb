@@ -227,12 +227,15 @@ end
 end
 
 def itemdetails
+headers['Access-Control-Allow-Origin'] = "*"
 
 @record_id = params[:record_id]
 @pagetitle = 'http://catalog.tadl.org/eg/opac/record/' + @record_id + '?locg=22'
 url = @pagetitle
 @doc = Nokogiri::HTML(open(url)) 
 @record_details = @doc.css("#main-content").map do |detail|
+{
+item:
 {
 :author => detail.at_css(".rdetail_authors_div").try(:text).try(:gsub!, /\n/," ").try(:squeeze),
 :title => detail.at_css("#rdetail_title").text,
@@ -243,10 +246,11 @@ url = @pagetitle
 :record_details => detail.at_css(".padding-ten.float-left").try(:text).try(:strip),
 :related_subjects => detail.at_css(".rdetail_subject_value").try(:text).try(:strip)
 }
+}
 end
 
 respond_to do |format|
-format.json { render :json => Oj.dump(@record_details)  }
+format.json { render :json => Oj.dump(items: @record_details)  }
 end
 
 
