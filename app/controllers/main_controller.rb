@@ -205,7 +205,7 @@ item:
 :author => item.at_css('[@name="item_author"]').text.strip,
 :summary => item.at_css(".result_table_summary").text.strip,
 :availability => item.at_css(".result_count").try(:text).try(:strip).try(:gsub!, /in TADL district./," "), 
-:callnumber => item.at_css('[@name="bib_cn_list"]').try(:text).try(:gsub!, /\n/," ").try(:squeeze),
+:callnumber => item.at_css('[@name="bib_cn_list"]').try(:text).try(:gsub!, /\n/," "),
 :record_id => item.at_css(".search_link").attr('name').sub!(/record_/, "")
 }
 }
