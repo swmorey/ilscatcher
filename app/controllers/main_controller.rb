@@ -306,7 +306,7 @@ form = agent.page.forms[1]
 form.field_with(:name => "username").value = @username
 form.field_with(:name => "password").value = @password
 results = agent.submit(form)
-@doc = renew.parser
+@doc = results.parser
 
 @user = @doc.css.map do |item| 
 {
