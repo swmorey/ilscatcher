@@ -313,7 +313,7 @@ accountpage = agent.get("https://catalog.tadl.org/eg/opac/myopac/main")
 {
 user:
 {
-:name => item.at_css('#dash_user'),
+:name => item.at_css('#dash_user').text.strip,
 :checkouts => item.at_css('#dash_checked').text.strip, 
 :holds => item.at_css('#dash_holds').text.strip,
 :pickups => item.at_css('#dash_pickup').text.strip,
