@@ -290,7 +290,7 @@ form.field_with(:name => "password").value = @password
 results = agent.submit(form)
 renew = agent.get('https://catalog.tadl.org/eg/opac/myopac/circs?&action=renew&circ='+ @circ_id +'')
 @doc = renew.parser
-@test = @doc.css("#renew-summary alert").text
+@test = @doc.css(".renew-summary").text
 respond_to do |format|
 format.json { render :json => Oj.dump(@test)  }
 end
