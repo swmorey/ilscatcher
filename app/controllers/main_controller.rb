@@ -296,6 +296,44 @@ format.json { render :json => Oj.dump(@test)  }
 end
 end
 
+def login
+@username = params[:u]
+@password = params[:pw]
+agent = Mechanize.new
+page = agent.get("https://catalog.tadl.org/eg/opac/login?redirect_to=%2Feg%2Fopac%2Fmyopac%2Fmain")
+page.forms.class == Array
+form = agent.page.forms[1]
+form.field_with(:name => "username").value = @username
+form.field_with(:name => "password").value = @password
+results = agent.submit(form)
+@doc = renew.parser
+
+@user = @doc.css.map do |item| 
+{
+user:
+{
+:name => item.at_css('#dash_user'),
+:checkouts => item.at_css('#dash_checked').text.strip, 
+:holds => item.at_css('#dash_holds').text.strip,
+:pickups => item.at_css('#dash_pickup').text.strip,
+:fines => item.at_css('#dash_fines').text.strip, 
+}
+}
+end 
+
+if @user.count == 0
+
+respond_to do |format|
+format.json { render :json => { :status => :error, :message => "Bad Login or Password" }}
+end
+else
+
+respond_to do |format|
+format.json { render :json => Oj.dump(users: @user)  }
+end
+end
+end
+
 
   
 end

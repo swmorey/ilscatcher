@@ -5,6 +5,7 @@ Ilscatcher::Application.routes.draw do
   get "main/about"
   get "main/hold"
   get "main/renew"
+  get "main/login"
   root :to => 'main#index'
   
   match ':controller/:action/:pagenumber/:querytitle'
