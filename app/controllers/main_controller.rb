@@ -255,10 +255,10 @@ format.json { render :json => Oj.dump(items: @record_details)  }
 end
 end
 
-def login
+def hold
 @username = params[:u]
 @password = params[:pw]
-@record_id = params[:id]
+@record_id = params[:record_id]
 agent = Mechanize.new
 page = agent.get("https://catalog.tadl.org/eg/opac/login?redirect_to=%2Feg%2Fopac%2Fmyopac%2Fmain")
 page.forms.class == Array
@@ -277,10 +277,25 @@ end
 end
 
 
+def renew
+@username = params[:u]
+@password = params[:pw]
+@circ_id = params[:circ_id]
+agent = Mechanize.new
+page = agent.get("https://catalog.tadl.org/eg/opac/login?redirect_to=%2Feg%2Fopac%2Fmyopac%2Fmain")
+page.forms.class == Array
+form = agent.page.forms[1]
+form.field_with(:name => "username").value = @username
+form.field_with(:name => "password").value = @password
+results = agent.submit(form)
+renew = agent.get('https://catalog.tadl.org/eg/opac/myopac/circs?&action=renew&circ='+ @circ_id +'')
+@doc = renew.parser
+@test = @doc.css("#renew-summary alert").text
+respond_to do |format|
+format.json { render :json => Oj.dump(@test)  }
+end
+end
 
-
-
-  
 
   
 end

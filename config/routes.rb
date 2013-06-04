@@ -3,7 +3,8 @@ Ilscatcher::Application.routes.draw do
   get "main/searchjson"
   get "main/itemdetails"
   get "main/about"
-  get "main/login"
+  get "main/hold"
+  get "main/renew"
   root :to => 'main#index'
   
   match ':controller/:action/:pagenumber/:querytitle'
