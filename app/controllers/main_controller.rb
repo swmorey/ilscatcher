@@ -238,7 +238,7 @@ url = @pagetitle
 {
 item:
 {
-:author => detail.at_css(".rdetail_authors_div").try(:text).try(:gsub!, /\n/," ").try(:squeeze),
+:author => detail.at_css(".rdetail_authors_div").try(:text).try(:gsub!, /\n/," ").try(:strip),
 :title => detail.at_css("#rdetail_title").text,
 :summary => detail.at_css("#rdetail_summary_from_rec").try(:text).try(:strip),
 :record_id => @record_id,
