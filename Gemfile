@@ -17,6 +17,7 @@ gem 'nokogiri'
 gem 'oj'
 gem 'unicorn'
 gem 'newrelic_rpm'
+gem 'mechanize'
 
 # Gems used only for assets and not required
 # in production environments by default.
