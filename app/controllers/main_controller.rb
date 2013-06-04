@@ -309,7 +309,7 @@ results = agent.submit(form)
 accountpage = agent.get("https://catalog.tadl.org/eg/opac/myopac/main")
 @doc = accountpage.parser
 
-@user = @doc.css.map do |item| 
+@user = @doc.css("body").map do |item| 
 {
 user:
 {
