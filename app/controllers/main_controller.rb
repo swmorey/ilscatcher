@@ -306,7 +306,8 @@ form = agent.page.forms[1]
 form.field_with(:name => "username").value = @username
 form.field_with(:name => "password").value = @password
 results = agent.submit(form)
-@doc = results.parser
+accountpage = agent.get("https://catalog.tadl.org/eg/opac/myopac/main")
+@doc = accountpage.parser
 
 @user = @doc.css.map do |item| 
 {
