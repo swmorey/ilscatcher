@@ -256,6 +256,7 @@ end
 end
 
 def hold
+headers['Access-Control-Allow-Origin'] = "*"
 @username = params[:u]
 @password = params[:pw]
 @record_id = params[:record_id]
@@ -278,6 +279,7 @@ end
 
 
 def renew
+headers['Access-Control-Allow-Origin'] = "*"
 @username = params[:u]
 @password = params[:pw]
 @circ_id = params[:circ_id]
@@ -297,6 +299,7 @@ end
 end
 
 def login
+headers['Access-Control-Allow-Origin'] = "*"
 @username = params[:u]
 @password = params[:pw]
 agent = Mechanize.new
