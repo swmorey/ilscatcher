@@ -5,6 +5,8 @@ require 'mechanize'
 require 'nokogiri'
 require 'open-uri'
 require 'oj'
+require 'openssl'
+OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 
 
@@ -293,8 +295,20 @@ results = agent.submit(form)
 renew = agent.get('https://catalog.tadl.org/eg/opac/myopac/circs?&action=renew&circ='+ @circ_id +'')
 @doc = renew.parser
 @test = @doc.css(".renew-summary").text
+@checkouts = @doc.css('//tr/td/[text()="Trial"]').map do |checkout|
+{
+checkout:
+{
+:name => checkout.css("/td[2]").try(:text).try(:strip).try(:gsub!, /\n/," ").try(:squeeze, " "),
+:renew_attempts => checkout.css("/td[4]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
+:due_date => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
+:format_icon => checkout.css("/td[3]/img").attr("src").text
+}
+}
+end 
+
 respond_to do |format|
-format.json { render :json => Oj.dump(@test)  }
+format.json { render :json => Oj.dump(@checkouts)  }
 end
 end
 
@@ -351,18 +365,21 @@ form.field_with(:name => "password").value = @password
 results = agent.submit(form)
 checkoutpage = agent.get("https://catalog.tadl.org/eg/opac/myopac/circs?loc=22")
 @doc = checkoutpage.parser
-rows = doc.xpath('//table/tbody/tr')
-@checkouts = rows.map do |row| 
+@checkouts = @doc.css('//table[2]/tr')[1..-1].map do |checkout|
 {
 checkout:
 {
-:name => row.at("td[1]").text.strip,
+:checkout_id => checkout.at('td[1]/input')['value'],
+:name => checkout.css("/td[2]").try(:text).try(:strip).try(:gsub!, /\n/," ").try(:squeeze, " "),
+:renew_attempts => checkout.css("/td[4]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
+:due_date => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
+:format_icon => checkout.css("/td[3]/img").attr("src").text
 }
 }
 end 
 
 respond_to do |format|
-format.json { render :json => Oj.dump(users: @checkouts)  }
+format.json { render :json => Oj.dump(checkouts: @checkouts)  }
 end
 
 
