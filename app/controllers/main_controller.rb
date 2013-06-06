@@ -338,6 +338,37 @@ end
 end
 end
 
+def showcheckouts
+headers['Access-Control-Allow-Origin'] = "*"
+@username = params[:u]
+@password = params[:pw]
+agent = Mechanize.new
+page = agent.get("https://catalog.tadl.org/eg/opac/login?redirect_to=%2Feg%2Fopac%2Fmyopac%2Fmain")
+page.forms.class == Array
+form = agent.page.forms[1]
+form.field_with(:name => "username").value = @username
+form.field_with(:name => "password").value = @password
+results = agent.submit(form)
+checkoutpage = agent.get("https://catalog.tadl.org/eg/opac/myopac/circs?loc=22")
+@doc = checkoutpage.parser
+rows = doc.xpath('//table/tbody/tr')
+@checkouts = rows.map do |row| 
+{
+checkout:
+{
+:name => row.at("td[1]").text.strip,
+}
+}
+end 
+
+respond_to do |format|
+format.json { render :json => Oj.dump(users: @checkouts)  }
+end
+
+
+end
+
+
 
   
 end
