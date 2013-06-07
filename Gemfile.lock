@@ -70,6 +70,10 @@ GEM
     net-http-digest_auth (1.3)
     net-http-persistent (2.8)
     newrelic_rpm (3.6.2.96)
+    nikkou (0.0.3)
+      activesupport
+      nokogiri
+      tzinfo
     nokogiri (1.5.9)
     ntlm-http (0.1.1)
     oj (2.0.14)
@@ -140,6 +144,7 @@ DEPENDENCIES
   jquery-rails
   mechanize
   newrelic_rpm
+  nikkou
   nokogiri
   oj
   pg
