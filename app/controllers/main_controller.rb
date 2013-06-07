@@ -5,9 +5,6 @@ require 'mechanize'
 require 'nokogiri'
 require 'open-uri'
 require 'oj'
-require 'openssl'
-OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
-
 
 
   def index
@@ -295,20 +292,22 @@ results = agent.submit(form)
 renew = agent.get('https://catalog.tadl.org/eg/opac/myopac/circs?&action=renew&circ='+ @circ_id +'')
 @doc = renew.parser
 @test = @doc.css(".renew-summary").text
-@checkouts = @doc.css('//tr/td/[text()="Trial"]').map do |checkout|
+@rows = @doc.search('//table[1]/tr/td/input[@value="17389932"]').text
+@checkouts = @doc.search('//table[1]/tr/td/input[@value="17389932"]').map do |checkout|
 {
 checkout:
 {
-:name => checkout.css("/td[2]").try(:text).try(:strip).try(:gsub!, /\n/," ").try(:squeeze, " "),
+:name => checkout.at_css("/td[2]").try(:text).try(:strip).try(:gsub!, /\n/," ").try(:squeeze, " "),
 :renew_attempts => checkout.css("/td[4]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 :due_date => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
-:format_icon => checkout.css("/td[3]/img").attr("src").text
 }
 }
-end 
+end
+
+
 
 respond_to do |format|
-format.json { render :json => Oj.dump(@checkouts)  }
+format.json { render :json => Oj.dump(@rows)  }
 end
 end
 
@@ -358,14 +357,14 @@ headers['Access-Control-Allow-Origin'] = "*"
 @password = params[:pw]
 agent = Mechanize.new
 page = agent.get("https://catalog.tadl.org/eg/opac/login?redirect_to=%2Feg%2Fopac%2Fmyopac%2Fmain")
-page.forms.class == Array
 form = agent.page.forms[1]
 form.field_with(:name => "username").value = @username
 form.field_with(:name => "password").value = @password
 results = agent.submit(form)
 checkoutpage = agent.get("https://catalog.tadl.org/eg/opac/myopac/circs?loc=22")
 @doc = checkoutpage.parser
-@checkouts = @doc.css('//table[2]/tr')[1..-1].map do |checkout|
+@pagetitle = @doc.css("title").text
+@checkouts = @doc.css('//table[1]/tr')[1..-1].map do |checkout|
 {
 checkout:
 {
@@ -373,16 +372,13 @@ checkout:
 :name => checkout.css("/td[2]").try(:text).try(:strip).try(:gsub!, /\n/," ").try(:squeeze, " "),
 :renew_attempts => checkout.css("/td[4]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 :due_date => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
-:format_icon => checkout.css("/td[3]/img").attr("src").text
 }
 }
 end 
 
 respond_to do |format|
-format.json { render :json => Oj.dump(checkouts: @checkouts)  }
+format.json { render :json => Oj.dump(checkouts: @checkouts)}
 end
-
-
 end
 
 
