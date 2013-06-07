@@ -6,6 +6,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'oj'
 require 'openssl'
+require 'nikkou'
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 
@@ -285,6 +286,7 @@ headers['Access-Control-Allow-Origin'] = "*"
 @username = params[:u]
 @password = params[:pw]
 @circ_id = params[:circ_id]
+@barcode = params[:bc]
 agent = Mechanize.new
 page = agent.get("https://catalog.tadl.org/eg/opac/login?redirect_to=%2Feg%2Fopac%2Fmyopac%2Fmain")
 page.forms.class == Array
@@ -294,21 +296,21 @@ form.field_with(:name => "password").value = @password
 results = agent.submit(form)
 renew = agent.get('https://catalog.tadl.org/eg/opac/myopac/circs?&action=renew&circ='+ @circ_id +'')
 @doc = renew.parser
-@test = @doc.css(".renew-summary").text
-@checkouts = @doc.css('//tr/td/[text()="Trial"]').map do |checkout|
+@test = @doc.css(".renew-summary").text.try(:gsub!, /\n/," ").try(:gsub!, /[^0-9A-Za-z]/, '').try(:squeeze, " ").try(:strip).try(:gsub, /torenew1items/, '').try(:gsub, /fullyrenewed1items/, '')
+
+@checkouts = @doc.search('tr').text_includes(@barcode).map do |checkout|
 {
 checkout:
 {
 :name => checkout.css("/td[2]").try(:text).try(:strip).try(:gsub!, /\n/," ").try(:squeeze, " "),
 :renew_attempts => checkout.css("/td[4]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 :due_date => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
-:format_icon => checkout.css("/td[3]/img").attr("src").text
 }
 }
 end 
 
 respond_to do |format|
-format.json { render :json => Oj.dump(@checkouts)  }
+format.json { render :json => Oj.dump(:checkouts => @checkouts, :response => @test )}   
 end
 end
 
@@ -373,7 +375,8 @@ checkout:
 :name => checkout.css("/td[2]").try(:text).try(:strip).try(:gsub!, /\n/," ").try(:squeeze, " "),
 :renew_attempts => checkout.css("/td[4]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 :due_date => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
-:format_icon => checkout.css("/td[3]/img").attr("src").text
+:format_icon => checkout.css("/td[3]/img").attr("src").text,
+:barcode => checkout.css("/td[6]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 }
 }
 end 
