@@ -370,7 +370,7 @@ checkoutpage = agent.get("https://catalog.tadl.org/eg/opac/myopac/circs?loc=22")
 checkout:
 {
 :checkout_id => checkout.at('td[1]/input')['value'],
-:name => checkout.css("/td[2]").try(:text).try(:strip).try(:gsub!, /\n/," ").try(:squeeze, " "),
+:name => checkout.css("/td[2]").try(:text).try(:gsub!, /\n/," ").try(:squeeze, " "),
 :renew_attempts => checkout.css("/td[4]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 :due_date => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 :format_icon => checkout.css("/td[3]/img").attr("src").text,
