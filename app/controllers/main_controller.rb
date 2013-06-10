@@ -384,7 +384,69 @@ format.json { render :json => Oj.dump(checkouts: @checkouts)}
 end
 end
 
+def showholds
+headers['Access-Control-Allow-Origin'] = "*"
+@username = params[:u]
+@password = params[:pw]
+agent = Mechanize.new
+page = agent.get("https://catalog.tadl.org/eg/opac/login?redirect_to=%2Feg%2Fopac%2Fmyopac%2Fmain")
+form = agent.page.forms[1]
+form.field_with(:name => "username").value = @username
+form.field_with(:name => "password").value = @password
+results = agent.submit(form)
+checkoutpage = agent.get("https://catalog.tadl.org/eg/opac/myopac/holds?loc=22")
+@doc = checkoutpage.parser
+@pagetitle = @doc.css("title").text
+@holds = @doc.css('tr#acct_holds_temp').map do |checkout|
+{
+hold:
+{
+:hold_id => checkout.at('td[1]/div/input')['value'],
+:name => checkout.css("/td[2]").try(:text).try(:gsub!, /\n/," ").try(:squeeze, " "),
+:author => checkout.css("/td[3]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
+:format_icon => checkout.css("/td[4]/div/img").attr('src').text,
+:pickup_location => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
+:status => checkout.css("/td[9]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip).try(:gsub, /hold/,"in line waiting").try(:gsub, /Waiting for copy/,"You are number").try(:gsub, /AvailableExpires/,"Ready for Pickup. Expires on"),
+}
+}
+end 
 
+respond_to do |format|
+format.json { render :json => Oj.dump(holds: @holds)}
+end
+end
+
+def showpickups
+headers['Access-Control-Allow-Origin'] = "*"
+@username = params[:u]
+@password = params[:pw]
+agent = Mechanize.new
+page = agent.get("https://catalog.tadl.org/eg/opac/login?redirect_to=%2Feg%2Fopac%2Fmyopac%2Fmain")
+form = agent.page.forms[1]
+form.field_with(:name => "username").value = @username
+form.field_with(:name => "password").value = @password
+results = agent.submit(form)
+checkoutpage = agent.get("https://catalog.tadl.org/eg/opac/myopac/holds?available=1")
+@doc = checkoutpage.parser
+@pagetitle = @doc.css("title").text
+@holds = @doc.css('tr#acct_holds_temp').map do |checkout|
+{
+hold:
+{
+:hold_id => checkout.at('td[1]/div/input')['value'],
+:name => checkout.css("/td[2]").try(:text).try(:gsub!, /\n/," ").try(:squeeze, " "),
+:author => checkout.css("/td[3]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
+:format_icon => checkout.css("/td[4]/div/img").attr('src').text,
+:pickup_location => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
+:status => checkout.css("/td[9]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip).try(:gsub, /hold/,"in line waiting").try(:gsub, /Waiting for copy/,"You are number").try(:gsub, /AvailableExpires/,"Ready for Pickup. Expires on"),
+}
+}
+end 
+
+respond_to do |format|
+format.json { render :json => Oj.dump(holds: @holds)}
+end
+end
 
   
 end
