@@ -312,6 +312,32 @@ format.json { render :json => Oj.dump(:checkouts => @checkouts, :response => @te
 end
 end
 
+def cancelhold
+headers['Access-Control-Allow-Origin'] = "*"
+@username = params[:u]
+@password = params[:pw]
+@hold_id = params[:hold_id]
+agent = Mechanize.new
+page = agent.get("https://catalog.tadl.org/eg/opac/login?redirect_to=%2Feg%2Fopac%2Fmyopac%2Fmain")
+page.forms.class == Array
+form = agent.page.forms[1]
+form.field_with(:name => "username").value = @username
+form.field_with(:name => "password").value = @password
+results = agent.submit(form)
+renew = agent.get('https://catalog.tadl.org/eg/opac/myopac/holds?&action=cancel&hold_id='+ @hold_id +'')
+
+respond_to do |format|
+format.json { render :json => Oj.dump("Hello")}   
+end
+
+
+end
+
+
+
+
+
+
 def login
 headers['Access-Control-Allow-Origin'] = "*"
 @username = params[:u]
@@ -383,6 +409,39 @@ respond_to do |format|
 format.json { render :json => Oj.dump(checkouts: @checkouts)}
 end
 end
+
+
+def showholds
+headers['Access-Control-Allow-Origin'] = "*"
+@username = params[:u]
+@password = params[:pw]
+agent = Mechanize.new
+page = agent.get("https://catalog.tadl.org/eg/opac/login?redirect_to=%2Feg%2Fopac%2Fmyopac%2Fmain")
+form = agent.page.forms[1]
+form.field_with(:name => "username").value = @username
+form.field_with(:name => "password").value = @password
+results = agent.submit(form)
+checkoutpage = agent.get("https://catalog.tadl.org/eg/opac/myopac/holds?loc=22")
+@doc = checkoutpage.parser
+@pagetitle = @doc.css("title").text
+@checkouts = @doc.css('tr#acct_holds_temp').map do |checkout|
+{
+checkout:
+{
+
+:name => checkout.css("/td[2]").try(:text).try(:gsub!, /\n/," ").try(:squeeze, " "),
+:renew_attempts => checkout.css("/td[4]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
+:due_date => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
+:barcode => checkout.css("/td[6]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
+}
+}
+end 
+
+respond_to do |format|
+format.json { render :json => Oj.dump(checkouts: @checkouts)}
+end
+end
+
 
 
 
