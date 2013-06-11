@@ -281,7 +281,7 @@ item:
 end
 end
 
-@filtered = @record_details
+@filtered = @record_details.compact
 
 respond_to do |format|
 format.json { render :json => Oj.dump(items: @filtered)  }
