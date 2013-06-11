@@ -6,6 +6,8 @@ require 'nokogiri'
 require 'open-uri'
 require 'oj'
 require 'nikkou'
+require 'openssl'
+OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
   def index
   
@@ -463,7 +465,7 @@ hold:
 {
 :hold_id => checkout.at('td[1]/div/input')['value'],
 :name => checkout.css("/td[2]").try(:text).try(:gsub!, /\n/," ").try(:squeeze, " "),
-:image => checkout.at_css("/td[2]/a/img").try(:attr, "src"),
+:image => checkout.at_css("/td[2]/div/a/img").try(:attr, "src"),
 :author => checkout.css("/td[3]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 :format_icon => checkout.css("/td[4]/div/img").attr('src').text,
 :pickup_location => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
