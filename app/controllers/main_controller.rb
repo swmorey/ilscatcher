@@ -265,8 +265,7 @@ agent = Mechanize.new
 itempage = agent.get(url)
 @doc = itempage.parser
 @record_details = @doc.css('//table#rdetails_status//tr')[1..-1].map do |detail|
-if detail.at_css("td[4]").try(:text).try(:squeeze, " ") == "Available"
-
+if detail.at_css("td[4]").try(:text).try(:squeeze, " ") == "Available" || detail.at_css("td[4]").try(:text).try(:squeeze, " ") == "Reshelving"
 {
 item:
 {
