@@ -10,6 +10,7 @@ Ilscatcher::Application.routes.draw do
   get "main/showholds"
   get "main/cancelhold"
   get "main/showpickups"
+  get "main/itemonshelf"
   root :to => 'main#index'
   
   match ':controller/:action/:pagenumber/:querytitle'
