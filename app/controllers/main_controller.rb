@@ -7,7 +7,6 @@ require 'open-uri'
 require 'oj'
 require 'nikkou'
 
-
   def index
   
 if params[:q].present?
@@ -203,10 +202,10 @@ item:
 {
 :title => item.at_css(".bigger").text.strip, 
 :author => item.at_css('[@name="item_author"]').text.strip.try(:squeeze, " "),
-:summary => item.at_css(".result_table_summary").text.strip,
 :availability => item.at_css(".result_count").try(:text).try(:strip).try(:gsub!, /in TADL district./," "), 
-:callnumber => item.at_css('[@name="bib_cn_list"]').try(:text).try(:gsub!, /\n/," ").try(:squeeze, " "),
-:record_id => item.at_css(".search_link").attr('name').sub!(/record_/, "")
+:record_id => item.at_css(".search_link").attr('name').sub!(/record_/, ""),
+:image => item.at_css(".result_table_pic").try(:attr, "src"),
+:format_icon => item.at_css(".result_table_title_cell img").try(:attr, "src")
 }
 }
 end 
@@ -431,6 +430,7 @@ checkout:
 {
 :checkout_id => checkout.at('td[1]/input')['value'],
 :name => checkout.css("/td[2]").try(:text).try(:gsub!, /\n/," ").try(:squeeze, " "),
+:image => checkout.at_css("/td[2]/a/img").try(:attr, "src"),
 :renew_attempts => checkout.css("/td[4]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 :due_date => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 :format_icon => checkout.css("/td[3]/img").attr("src").text,
@@ -463,6 +463,7 @@ hold:
 {
 :hold_id => checkout.at('td[1]/div/input')['value'],
 :name => checkout.css("/td[2]").try(:text).try(:gsub!, /\n/," ").try(:squeeze, " "),
+:image => checkout.at_css("/td[2]/a/img").try(:attr, "src"),
 :author => checkout.css("/td[3]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 :format_icon => checkout.css("/td[4]/div/img").attr('src').text,
 :pickup_location => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
