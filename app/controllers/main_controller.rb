@@ -6,8 +6,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'oj'
 require 'nikkou'
-require 'openssl'
-OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+
 
   def index
   
@@ -207,6 +206,7 @@ item:
 :availability => item.at_css(".result_count").try(:text).try(:strip).try(:gsub!, /in TADL district./," "), 
 :record_id => item.at_css(".search_link").attr('name').sub!(/record_/, ""),
 :image => item.at_css(".result_table_pic").try(:attr, "src"),
+:record_year => item.at_css(".record_year").try(:text),
 :format_icon => item.at_css(".result_table_title_cell img").try(:attr, "src")
 }
 }
@@ -513,6 +513,27 @@ respond_to do |format|
 
 format.json { render :json => Oj.dump(holds: @holds)}
 end
+end
+
+def showcard
+headers['Access-Control-Allow-Origin'] = "*"
+@username = params[:u]
+@password = params[:pw]
+agent = Mechanize.new
+page = agent.get("https://catalog.tadl.org/eg/opac/login?redirect_to=%2Feg%2Fopac%2Fmyopac%2Fmain")
+form = agent.page.forms[1]
+form.field_with(:name => "username").value = @username
+form.field_with(:name => "password").value = @password
+results = agent.submit(form)
+accountdetails = agent.get("https://catalog.tadl.org/eg/opac/myopac/prefs?loc=22")
+@doc = accountdetails.parser
+@barcode = @doc.css('//tbody[1]/tr[10]/td[2]').text
+respond_to do |format|
+
+format.json { render :json => Oj.dump(barcode: @barcode)}
+end
+
+
 end
 
 
