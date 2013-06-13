@@ -530,7 +530,8 @@ accountdetails = agent.get("https://catalog.tadl.org/eg/opac/myopac/prefs?loc=22
 @barcode = @doc.css('//tbody[1]/tr[10]/td[2]').text
 respond_to do |format|
 
-format.json { render :json => Oj.dump(barcode: @barcode)}
+format.json { render :json => { :barcode => @barcode}}
+
 end
 
 
