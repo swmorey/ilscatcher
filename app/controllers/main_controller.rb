@@ -527,7 +527,7 @@ form.field_with(:name => "password").value = @password
 results = agent.submit(form)
 accountdetails = agent.get("https://catalog.tadl.org/eg/opac/myopac/prefs?loc=22")
 @doc = accountdetails.parser
-@barcode = @doc.css('//tbody[1]/tr[10]/td[2]').text
+@barcode = @doc.css('.active_barcode').text
 respond_to do |format|
 
 format.json { render :json => { :barcode => @barcode}}
