@@ -207,9 +207,9 @@ item:
 :author => item.at_css('[@name="item_author"]').text.strip.try(:squeeze, " "),
 :availability => item.at_css(".result_count").try(:text).try(:strip).try(:gsub!, /in TADL district./," "), 
 :record_id => item.at_css(".search_link").attr('name').sub!(/record_/, ""),
-:image => item.at_css(".result_table_pic").try(:attr, "src"),
+:image => item.at_css(".result_table_pic").try(:attr, "src").try(:gsub, /^\//, "http://catalog.tadl.org/"),
 :record_year => item.at_css(".record_year").try(:text),
-:format_icon => item.at_css(".result_table_title_cell img").try(:attr, "src")
+:format_icon => item.at_css(".result_table_title_cell img").try(:attr, "src").try(:gsub, /^\//, "http://catalog.tadl.org/")
 }
 }
 end 
@@ -429,10 +429,10 @@ checkout:
 {
 :checkout_id => checkout.at('td[1]/input')['value'],
 :name => checkout.css("/td[2]").try(:text).try(:gsub!, /\n/," ").try(:squeeze, " "),
-:image => checkout.at_css("/td[2]/a/img").try(:attr, "src"),
+:image => checkout.at_css("/td[2]/a/img").try(:attr, "src").try(:gsub, /^\//, "http://catalog.tadl.org/"),
 :renew_attempts => checkout.css("/td[4]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 :due_date => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
-:format_icon => checkout.css("/td[3]/img").attr("src").text,
+:format_icon => checkout.css("/td[3]/img").attr("src").text.try(:gsub, /^\//, "http://catalog.tadl.org/"),
 :barcode => checkout.css("/td[6]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 }
 }
@@ -462,9 +462,9 @@ hold:
 {
 :hold_id => checkout.at('td[1]/div/input')['value'],
 :name => checkout.css("/td[2]").try(:text).try(:gsub!, /\n/," ").try(:squeeze, " "),
-:image => checkout.at_css("/td[2]/div/a/img").try(:attr, "src"),
+:image => checkout.at_css("/td[2]/div/a/img").try(:attr, "src").try(:gsub, /^\//, "http://catalog.tadl.org/"),
 :author => checkout.css("/td[3]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
-:format_icon => checkout.css("/td[4]/div/img").attr('src').text,
+:format_icon => checkout.css("/td[4]/div/img").attr('src').text.try(:gsub, /^\//, "http://catalog.tadl.org/"),
 :pickup_location => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 :status => checkout.css("/td[9]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip).try(:gsub, /hold/,"in line waiting").try(:gsub, /Waiting for copy/,"You are number").try(:gsub, /AvailableExpires/,"Ready for Pickup. Expires on"),
 }
@@ -498,8 +498,8 @@ hold:
 :hold_id => checkout.at('td[1]/div/input')['value'],
 :name => checkout.css("/td[2]").try(:text).try(:gsub!, /\n/," ").try(:squeeze, " "),
 :author => checkout.css("/td[3]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
-:format_icon => checkout.css("/td[4]/div/img").attr('src').text,
-:image => checkout.at_css("/td[2]/div/a/img").try(:attr, "src"),
+:format_icon => checkout.css("/td[4]/div/img").attr('src').text.try(:gsub, /^\//, "http://catalog.tadl.org/"),
+:image => checkout.at_css("/td[2]/div/a/img").try(:attr, "src").try(:gsub, /^\//, "http://catalog.tadl.org/"),
 :pickup_location => checkout.css("/td[5]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip),
 :status => checkout.css("/td[9]").text.to_s.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip).try(:gsub, /hold/,"in line waiting").try(:gsub, /Waiting for copy/,"You are number").try(:gsub, /AvailableExpires/,"Ready for Pickup. Expires on"),
 }
