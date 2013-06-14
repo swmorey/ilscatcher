@@ -306,7 +306,7 @@ holdpage = agent.get('https://catalog.tadl.org/eg/opac/place_hold?;locg=22;hold_
 holdform = agent.page.forms[1]  
 holdconfirm = agent.submit(holdform)
 @doc = holdconfirm.parser
-@test = @doc.css("#hold-items-list").text
+@test = @doc.css("#hold-items-list").try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip)
 respond_to do |format|
 format.json { render :json => Oj.dump(@test)  }
 end
@@ -367,11 +367,6 @@ end
 
 
 end
-
-
-
-
-
 
 def login
 headers['Access-Control-Allow-Origin'] = "*"
