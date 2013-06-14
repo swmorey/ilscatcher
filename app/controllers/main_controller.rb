@@ -6,6 +6,8 @@ require 'nokogiri'
 require 'open-uri'
 require 'oj'
 require 'nikkou'
+require 'openssl'
+OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 
   def index
@@ -306,7 +308,7 @@ holdpage = agent.get('https://catalog.tadl.org/eg/opac/place_hold?;locg=22;hold_
 holdform = agent.page.forms[1]  
 holdconfirm = agent.submit(holdform)
 @doc = holdconfirm.parser
-@test = @doc.css("#hold-items-list").try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip)
+@test = @doc.css("#hold-items-list").text.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip).try(:gsub!, /.*?(?=.)/im, "")
 respond_to do |format|
 format.json { render :json => Oj.dump(@test)  }
 end
