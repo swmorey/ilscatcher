@@ -1,0 +1,2 @@
+module MelcatHelper
+end

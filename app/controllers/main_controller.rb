@@ -6,9 +6,6 @@ require 'nokogiri'
 require 'open-uri'
 require 'oj'
 require 'nikkou'
-require 'openssl'
-OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
-
 
   def index
   
@@ -287,7 +284,7 @@ end
 @filtered = @record_details.compact
 
 respond_to do |format|
-format.json { render :json => Oj.dump(items: @filtered)  }
+format.json { render :json => Oj.dump(items: @filtered.uniq)  }
 end
 end
 
@@ -308,9 +305,9 @@ holdpage = agent.get('https://catalog.tadl.org/eg/opac/place_hold?;locg=22;hold_
 holdform = agent.page.forms[1]  
 holdconfirm = agent.submit(holdform)
 @doc = holdconfirm.parser
-@test = @doc.css("#hold-items-list").text.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip).try(:gsub!, /.*?(?=.)/im, "")
+@confirm_message = @doc.css("#hold-items-list").text.try(:gsub!, /\n/," ").try(:squeeze, " ").try(:strip).try(:split, ". ").try(:last)
 respond_to do |format|
-format.json { render :json => Oj.dump(@test)  }
+format.json { render :json => Oj.dump(:message => @confirm_message)  }
 end
 end
 
@@ -330,7 +327,7 @@ form.field_with(:name => "password").value = @password
 results = agent.submit(form)
 renew = agent.get('https://catalog.tadl.org/eg/opac/myopac/circs?&action=renew&circ='+ @circ_id +'')
 @doc = renew.parser
-@test = @doc.css(".renew-summary").text.try(:gsub!, /\n/," ").try(:gsub!, /[^0-9A-Za-z]/, '').try(:squeeze, " ").try(:strip).try(:gsub, /torenew1items/, '').try(:gsub, /fullyrenewed1items/, '')
+@test = @doc.css(".renew-summary").text.try(:gsub!, /\n/," ").try(:gsub!, /[^0-9A-Za-z]/, '').try(:squeeze, " ").try(:strip).try(:gsub, /torenew1items/, '')
 @checkouts = @doc.search('tr').text_includes(@barcode).map do |checkout|
 {
 checkout:
